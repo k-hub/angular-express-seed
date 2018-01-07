@@ -29,6 +29,8 @@ module.exports = function (grunt) {
     // Required for page reload error
   var modRewrite = require('connect-modrewrite');
 
+  var serveStatic = require('serve-static');
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -92,32 +94,32 @@ module.exports = function (grunt) {
           middleware: function (connect, options) {
             // return [
             //   require('grunt-connect-proxy/lib/utils').proxyRequest,
-            //   connect.static('.tmp'),
+            //   serveStatic('.tmp'),
             //   connect().use(
             //     '/bower_components',
-            //     connect.static('./bower_components')
+            //     serveStatic('./bower_components')
             //   ),
             //   connect().use(
             //     '/app/styles',
-            //     connect.static('./app/styles')
+            //     serveStatic('./app/styles')
             //   ),
-            //   connect.static(appConfig.app)
+            //   serveStatic(appConfig.app)
             // ];
             // 
             var middlewares = [];
 
             middlewares.push(require('grunt-connect-proxy/lib/utils').proxyRequest);
             middlewares.push(modRewrite(['^[^\.]*$ /index.html [L]'])); //Matches everything that does not contain a '.'
-            middlewares.push(connect.static('.tmp'));
+            middlewares.push(serveStatic('.tmp'));
             middlewares.push(connect().use(
               '/bower_components',
-              connect.static('./bower_components')));
+              serveStatic('./bower_components')));
             middlewares.push(connect().use(
               '/app/styles',
-              connect.static('./app/styles')));
-            middlewares.push(connect.static(appConfig.app));
+              serveStatic('./app/styles')));
+            middlewares.push(serveStatic(appConfig.app));
             options.base.forEach(function(base) {
-              middlewares.push(connect.static(base));
+              middlewares.push(serveStatic(base));
             });
             return middlewares;
           }
@@ -128,13 +130,13 @@ module.exports = function (grunt) {
           port: 9001,
           middleware: function (connect) {
             return [
-              connect.static('.tmp'),
-              connect.static('test'),
+              serveStatic('.tmp'),
+              serveStatic('test'),
               connect().use(
                 '/bower_components',
-                connect.static('./bower_components')
+                serveStatic('./bower_components')
               ),
-              connect.static(appConfig.app)
+              serveStatic(appConfig.app)
             ];
           }
         }
